@@ -1,0 +1,35 @@
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        if (s1.length() > s2.length()) return false;
+
+        // Frequency map for s1
+        HashMap<Character, Integer> target = new HashMap<>();
+        for (char c : s1.toCharArray()) {
+            target.put(c, target.getOrDefault(c, 0) + 1);
+        }
+
+        HashMap<Character, Integer> window = new HashMap<>();
+        int i = 0, j = 0;
+        int n = s2.length();
+
+        while (j < n) {
+            char endChar = s2.charAt(j);
+            window.put(endChar, window.getOrDefault(endChar, 0) + 1);
+
+            // shrinlling 
+            while (j - i + 1 > s1.length()) {
+                char startChar = s2.charAt(i);
+                window.put(startChar, window.get(startChar) - 1);
+                if (window.get(startChar) == 0) window.remove(startChar);
+                i++;
+            }
+
+            if (j - i + 1 == s1.length() && window.equals(target)) {
+                return true;
+            }
+            j++;
+        }
+
+        return false;
+    }
+}
